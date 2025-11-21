@@ -1,0 +1,27 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.EditarMascotaPage"
+             Title="Editar Mascota"
+             BackgroundColor="#FAFAFA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Entry x:Name="nombreEntry" Placeholder="Nombre" />
+            <Entry x:Name="especieEntry" Placeholder="Especie" />
+            <Entry x:Name="razaEntry" Placeholder="Raza" />
+            <Entry x:Name="edadEntry" Placeholder="Edad" />
+
+            <Image x:Name="fotoMascota"
+                   WidthRequest="200"
+                   HeightRequest="200"
+                   Aspect="AspectFill"
+                   IsVisible="False"
+                   BackgroundColor="#EEE"/>
+
+            <Button Text="Actualizar Mascota"
+                    Clicked="OnActualizarClicked"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

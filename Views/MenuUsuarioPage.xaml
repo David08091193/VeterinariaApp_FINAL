@@ -1,0 +1,44 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.MenuUsuarioPage"
+             Title="Menú Usuario"
+             BackgroundColor="#F3F3F3">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="👤 Bienvenido Usuario"
+               Style="{StaticResource RoleTitleStyle}" />
+
+        <Button x:Name="btnMisMascotas"
+                Text="🐾 Mis Mascotas"
+                BackgroundColor="#03A9F4"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                HeightRequest="50"
+                Clicked="OnMisMascotasClicked" />
+
+        <Button x:Name="btnAgendar"
+                Text="📅 Agendar Cita"
+                BackgroundColor="#03A9F4"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                HeightRequest="50"
+                Clicked="OnAgendarClicked" />
+
+        <Button x:Name="btnMisCitas"
+                Text="🧾 Mis Citas"
+                BackgroundColor="#03A9F4"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                HeightRequest="50"
+                Clicked="OnMisCitasClicked" />
+
+        <Button Text="🚪 Cerrar sesión"
+                BackgroundColor="#F44336"
+                TextColor="White"
+                FontAttributes="Bold"
+                Clicked="OnCerrarSesionClicked" />
+    </VerticalStackLayout>
+</ContentPage>

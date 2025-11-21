@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Colores por rol -->
+    <Color x:Key="VetColor">#7E57C2</Color>
+    <!-- Púrpura -->
+
+    <!-- Estilo botón Veterinario -->
+    <Style x:Key="VetButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource VetColor}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="Margin" Value="0,5" />
+    </Style>
+
+    <!-- Estilo título -->
+    <Style x:Key="RoleTitleStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="26" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="TextColor" Value="#333" />
+        <Setter Property="Margin" Value="0,10" />
+    </Style>
+</ResourceDictionary>

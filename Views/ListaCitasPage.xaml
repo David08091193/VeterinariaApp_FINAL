@@ -1,0 +1,35 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.ListaCitasPage"
+             Title="Citas Agendadas"
+             BackgroundColor="#FAFAFA">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Citas Agendadas"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#333"/>
+
+        <CollectionView x:Name="citasCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="#DDD" Padding="10" Margin="5">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding NombreMascota}" FontSize="18" FontAttributes="Bold"/>
+                            <Label Text="{Binding Fecha, StringFormat='Fecha: {0:dd/MM/yyyy}'}"/>
+                            <Label Text="{Binding Hora, StringFormat='Hora: {0}'}"/>
+                            <Label Text="{Binding Motivo}" FontAttributes="Italic"/>
+
+                            <Button Text="Eliminar cita 🗑️"
+                                    BackgroundColor="#F44336"
+                                    TextColor="White"
+                                    Clicked="OnEliminarCitaClicked"
+                                    CommandParameter="{Binding .}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,33 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.VerHistorialPage"
+             Title="Ver Historial Médico"
+             BackgroundColor="#FAFAFA">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Picker x:Name="mascotaPicker"
+                Title="Selecciona una mascota"
+                ItemDisplayBinding="{Binding Nombre}"
+                BackgroundColor="White"/>
+
+        <Button Text="Buscar historial"
+                Clicked="OnBuscarHistorialClicked"
+                BackgroundColor="#2196F3"
+                TextColor="White"/>
+
+        <CollectionView x:Name="historialCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="#DDD" Padding="10" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Fecha, StringFormat='Fecha: {0:dd/MM/yyyy}'}"/>
+                            <Label Text="{Binding Diagnostico}" FontAttributes="Bold"/>
+                            <Label Text="{Binding Tratamiento}" />
+                            <Label Text="{Binding Observaciones}" FontAttributes="Italic"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

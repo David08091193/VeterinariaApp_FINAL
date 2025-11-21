@@ -1,0 +1,56 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.RegistroMascotaPage"
+             Title="Registrar Mascota"
+             BackgroundColor="#FAFAFA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Registro de Mascota"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#333"/>
+
+            <Entry x:Name="nombreEntry"
+                   Placeholder="Nombre de la mascota"
+                   FontSize="18"/>
+
+            <Entry x:Name="especieEntry"
+                   Placeholder="Especie (Perro, Gato, etc.)"
+                   FontSize="18"/>
+
+            <Entry x:Name="razaEntry"
+                   Placeholder="Raza"
+                   FontSize="18"/>
+
+            <Entry x:Name="edadEntry"
+                   Placeholder="Edad"
+                   Keyboard="Numeric"
+                   MaxLength="3"
+                   FontSize="18"/>
+
+            <Button Text="Tomar Foto"
+                    Clicked="OnTomarFotoClicked"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"/>
+
+            <Image x:Name="fotoMascota"
+                   HeightRequest="200"
+                   Aspect="AspectFill"
+                   IsVisible="False"/>
+
+            <Button Text="Guardar Mascota"
+                    Clicked="OnGuardarClicked"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"/>
+
+            <Button Text="Ver mascotas registradas"
+        Clicked="OnVerMascotasClicked"
+        BackgroundColor="#FF9800"
+        TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,27 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.HistorialMedicoPage"
+             Title="Historial Médico"
+             BackgroundColor="#FAFAFA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Picker para seleccionar mascota registrada -->
+            <Picker x:Name="mascotaPicker"
+                    Title="Selecciona una mascota"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    BackgroundColor="White"/>
+
+            <Editor x:Name="descripcionEditor" Placeholder="Diagnóstico o descripción"/>
+            <Editor x:Name="tratamientoEditor" Placeholder="Tratamiento"/>
+            <Editor x:Name="observacionesEditor" Placeholder="Observaciones (opcional)"/>
+            <DatePicker x:Name="fechaPicker" />
+
+            <Button Text="Guardar Historial"
+                    Clicked="OnGuardarHistorialClicked"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,31 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.EntradaSalidaPage"
+             Title="Entrada/Salida"
+             BackgroundColor="#FAFAFA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Picker x:Name="mascotaPicker"
+                    Title="Selecciona una mascota"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    BackgroundColor="White"/>
+
+            <Label Text="Fecha y hora de entrada" FontAttributes="Bold"/>
+            <DatePicker x:Name="fechaEntradaPicker" />
+            <TimePicker x:Name="horaEntradaPicker" />
+
+            <Label Text="Fecha y hora de salida" FontAttributes="Bold"/>
+            <DatePicker x:Name="fechaSalidaPicker" />
+            <TimePicker x:Name="horaSalidaPicker" />
+
+            <Editor x:Name="motivoEditor" Placeholder="Motivo de la visita (consulta, cirugía, hospedaje...)" />
+
+            <Button Text="Guardar Registro"
+                    Clicked="OnGuardarEntradaSalidaClicked"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

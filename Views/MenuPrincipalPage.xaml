@@ -1,0 +1,51 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.MenuPrincipalPage"
+             Title="Menú Principal"
+             BackgroundColor="#FAFAFA">
+
+    <VerticalStackLayout Padding="20" Spacing="25" VerticalOptions="Center">
+        <Label Text="Menú Principal"
+               FontSize="28"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"/>
+
+        <Button Text="🐾 Registrar Mascota"
+                Clicked="OnRegistrarMascotaClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"/>
+
+        <Button Text="📋 Lista de Mascotas"
+                Clicked="OnListaMascotasClicked"
+                BackgroundColor="#2196F3"
+                TextColor="White"/>
+
+        <Button Text="📅 Agenda de Citas"
+                Clicked="OnAgendaCitasClicked"
+                BackgroundColor="#FF9800"
+                TextColor="White"/>
+
+        <Button Text="🩺  Historial Médico"
+        BackgroundColor="#7B1FA2"
+        TextColor="White"
+        Clicked="OnRegistrarHistorialClicked"/>
+
+        <Button Text="🔍 Ver Historial Médico"
+                Clicked="OnVerHistorialClicked"
+                BackgroundColor="#9C27B0"
+                TextColor="White"/>
+
+        <Button Text="🚪 Entrada/Salida"
+                Clicked="OnEntradaSalidaClicked"
+                BackgroundColor="#607D8B"
+                TextColor="White"/>
+
+        <Button Text="📋 Ver Entrada/Salida"
+        Clicked="OnVerEntradaSalidaClicked"
+        BackgroundColor="#00BCD4"
+        TextColor="White"/>
+
+
+
+    </VerticalStackLayout>
+</ContentPage>

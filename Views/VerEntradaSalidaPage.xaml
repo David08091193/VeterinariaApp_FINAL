@@ -1,0 +1,34 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.VerEntradaSalidaPage"
+             Title="Ver Entrada/Salida"
+             BackgroundColor="#FAFAFA">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Picker x:Name="mascotaPicker"
+                Title="Selecciona una mascota"
+                ItemDisplayBinding="{Binding Nombre}"
+                BackgroundColor="White"/>
+
+        <Button Text="🔍 Ver registros"
+                Clicked="OnVerRegistrosClicked"
+                BackgroundColor="#2196F3"
+                TextColor="White"/>
+
+        <CollectionView x:Name="registrosCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="#BDBDBD" Padding="10" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding FechaEntrada, StringFormat='Entrada: {0:dd/MM/yyyy HH:mm}'}" />
+                            <Label Text="{Binding FechaSalida, StringFormat='Salida: {0:dd/MM/yyyy HH:mm}'}" />
+                            <Label Text="{Binding Motivo, StringFormat='Motivo: {0}'}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>
