@@ -1,11 +1,13 @@
 using Microsoft.Maui.Controls;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class EditarMascotaPage : ContentPage
     {
         private Mascota mascotaActual;
+        private readonly MascotaService _mascotaService = new();
 
         public EditarMascotaPage(Mascota mascota)
         {
@@ -31,9 +33,17 @@ namespace VeterinariaApp.Views
             mascotaActual.Raza = razaEntry.Text;
             mascotaActual.Edad = edadEntry.Text;
 
-            await App.Database.GuardarMascotaAsync(mascotaActual);
-            await DisplayAlert("Éxito", "Mascota actualizada correctamente.", "OK");
-            await Navigation.PopAsync(); // Regresa a la lista
+            bool ok = await _mascotaService.ActualizarMascotaAsync(mascotaActual);
+
+            if (ok)
+            {
+                await DisplayAlert("Éxito", "Mascota actualizada correctamente.", "OK");
+                await Navigation.PopAsync(); // Regresa a la lista
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo actualizar la mascota en el servidor.", "OK");
+            }
         }
     }
 }

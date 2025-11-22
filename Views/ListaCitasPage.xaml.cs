@@ -1,14 +1,17 @@
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage; // NECESARIO para Preferences
+using Microsoft.Maui.Storage; // para Preferences
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class ListaCitasPage : ContentPage
     {
+        private readonly CitaService _citaService = new();
+
         public ListaCitasPage()
         {
             InitializeComponent();
@@ -29,11 +32,11 @@ namespace VeterinariaApp.Views
 
             if (rol == "Veterinario")
             {
-                citas = await App.Database.ObtenerTodasLasCitasAsync();
+                citas = await _citaService.ObtenerTodasLasCitasAsync();
             }
             else
             {
-                citas = await App.Database.ObtenerCitasPorUsuarioAsync(nombreUsuario);
+                citas = await _citaService.ObtenerCitasPorUsuarioAsync(nombreUsuario);
             }
 
             citasCollectionView.ItemsSource = citas;
@@ -50,9 +53,16 @@ namespace VeterinariaApp.Views
             bool confirmar = await DisplayAlert("Confirmar", "¿Deseas eliminar esta cita?", "Sí", "No");
             if (confirmar)
             {
-                await App.Database.EliminarCitaAsync(citaSeleccionada);
-                await DisplayAlert("Cita eliminada", "La cita ha sido eliminada correctamente.", "OK");
-                await CargarCitasPorRol(); // Recarga según el rol
+                bool ok = await _citaService.EliminarCitaAsync(citaSeleccionada.Id);
+                if (ok)
+                {
+                    await DisplayAlert("Cita eliminada", "La cita ha sido eliminada correctamente.", "OK");
+                    await CargarCitasPorRol();
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se pudo eliminar la cita en el servidor.", "OK");
+                }
             }
         }
     }

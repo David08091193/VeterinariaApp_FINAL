@@ -2,6 +2,8 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
 using System;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
+
 
 namespace VeterinariaApp.Views
 {
@@ -52,23 +54,35 @@ namespace VeterinariaApp.Views
 
             var nuevaMascota = new Mascota
             {
+                Id = 0,
                 Nombre = nombre,
                 Especie = especie,
                 Raza = raza,
                 Edad = edad,
-                FotoPath = fotoFile?.FullPath
+                FotoPath = fotoFile?.FullPath ?? "sin-foto.jpg"
             };
 
-            await App.Database.GuardarMascotaAsync(nuevaMascota);
+            var servicio = new MascotaService();
+            bool resultado = await servicio.CrearMascotaAsync(nuevaMascota);
 
-            await DisplayAlert("Éxito", "Mascota registrada correctamente.", "OK");
+            if (resultado)
+            {
+                await DisplayAlert("Éxito", "Mascota registrada correctamente en el servidor.", "OK");
 
-            nombreEntry.Text = "";
-            especieEntry.Text = "";
-            razaEntry.Text = "";
-            edadEntry.Text = "";
-            fotoMascota.Source = null;
-            fotoMascota.IsVisible = false;
+                nombreEntry.Text = "";
+                especieEntry.Text = "";
+                razaEntry.Text = "";
+                edadEntry.Text = "";
+                fotoMascota.Source = null;
+                fotoMascota.IsVisible = false;
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo registrar la mascota en el servidor.", "OK");
+            }
+
+
+
         }
 
         private async void OnVerMascotasClicked(object sender, EventArgs e)

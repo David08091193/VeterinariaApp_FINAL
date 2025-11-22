@@ -2,11 +2,15 @@ using Microsoft.Maui.Controls;
 using System;
 using System.Linq;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class VerEntradaSalidaPage : ContentPage
     {
+        private readonly MascotaService _mascotaService = new();
+        private readonly EntradaSalidaService _entradaSalidaService = new();
+
         public VerEntradaSalidaPage()
         {
             InitializeComponent();
@@ -16,8 +20,15 @@ namespace VeterinariaApp.Views
         {
             base.OnAppearing();
 
-            var mascotas = await App.Database.ObtenerMascotasAsync();
-            mascotaPicker.ItemsSource = mascotas;
+            try
+            {
+                var mascotas = await _mascotaService.ObtenerMascotasAsync();
+                mascotaPicker.ItemsSource = mascotas;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar las mascotas: {ex.Message}", "OK");
+            }
         }
 
         private async void OnVerRegistrosClicked(object sender, EventArgs e)
@@ -30,13 +41,20 @@ namespace VeterinariaApp.Views
                 return;
             }
 
-            var todosLosRegistros = await App.Database.ObtenerEntradasSalidasAsync();
-            var registrosFiltrados = todosLosRegistros
-                .Where(r => r.NombreMascota == mascotaSeleccionada.Nombre)
-                .OrderByDescending(r => r.FechaEntrada)
-                .ToList();
+            try
+            {
+                var todosLosRegistros = await _entradaSalidaService.ObtenerRegistrosAsync();
+                var registrosFiltrados = todosLosRegistros
+                    .Where(r => r.NombreMascota == mascotaSeleccionada.Nombre)
+                    .OrderByDescending(r => r.FechaEntrada)
+                    .ToList();
 
-            registrosCollectionView.ItemsSource = registrosFiltrados;
+                registrosCollectionView.ItemsSource = registrosFiltrados;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar los registros: {ex.Message}", "OK");
+            }
         }
     }
 }

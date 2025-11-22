@@ -1,10 +1,13 @@
 using Microsoft.Maui.Controls;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class RegistroUsuarioPage : ContentPage
     {
+        private readonly UsuarioService _usuarioService = new();
+
         public RegistroUsuarioPage()
         {
             InitializeComponent();
@@ -35,9 +38,17 @@ namespace VeterinariaApp.Views
                 Rol = rolPicker.SelectedItem?.ToString() ?? "Usuario"
             };
 
-            await App.Database.GuardarUsuarioAsync(nuevoUsuario);
-            await DisplayAlert("Cuenta creada", "Tu usuario ha sido registrado correctamente.", "OK");
-            await Navigation.PopAsync(); // Regresa al Login
+            bool ok = await _usuarioService.RegistrarAsync(nuevoUsuario);
+
+            if (ok)
+            {
+                await DisplayAlert("Cuenta creada", "Tu usuario ha sido registrado correctamente.", "OK");
+                await Navigation.PopAsync(); // Regresa al Login
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo registrar el usuario en el servidor.", "OK");
+            }
         }
     }
 }

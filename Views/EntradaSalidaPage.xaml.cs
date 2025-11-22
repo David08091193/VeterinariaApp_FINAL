@@ -1,11 +1,15 @@
 using Microsoft.Maui.Controls;
 using System;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class EntradaSalidaPage : ContentPage
     {
+        private readonly MascotaService _mascotaService = new();
+        private readonly EntradaSalidaService _entradaSalidaService = new();
+
         public EntradaSalidaPage()
         {
             InitializeComponent();
@@ -15,8 +19,15 @@ namespace VeterinariaApp.Views
         {
             base.OnAppearing();
 
-            var mascotas = await App.Database.ObtenerMascotasAsync();
-            mascotaPicker.ItemsSource = mascotas;
+            try
+            {
+                var mascotas = await _mascotaService.ObtenerMascotasAsync();
+                mascotaPicker.ItemsSource = mascotas;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar las mascotas: {ex.Message}", "OK");
+            }
         }
 
         private async void OnGuardarEntradaSalidaClicked(object sender, EventArgs e)
@@ -41,9 +52,17 @@ namespace VeterinariaApp.Views
                 Motivo = motivo
             };
 
-            await App.Database.GuardarEntradaSalidaAsync(registro);
-            await DisplayAlert("Registro guardado", "El ingreso/salida ha sido registrado correctamente.", "OK");
-            await Navigation.PopAsync();
+            bool ok = await _entradaSalidaService.CrearRegistroAsync(registro);
+
+            if (ok)
+            {
+                await DisplayAlert("Éxito", "El ingreso/salida ha sido registrado correctamente.", "OK");
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo registrar el ingreso/salida en el servidor.", "OK");
+            }
         }
     }
 }

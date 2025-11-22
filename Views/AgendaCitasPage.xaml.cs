@@ -1,14 +1,15 @@
 ﻿using Microsoft.Maui.Controls;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using VeterinariaApp.Models;
-using VeterinariaApp.Views;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class AgendaCitasPage : ContentPage
     {
+        private readonly MascotaService _mascotaService = new();
+        private readonly CitaService _citaService = new();
+
         public AgendaCitasPage()
         {
             InitializeComponent();
@@ -18,9 +19,15 @@ namespace VeterinariaApp.Views
         {
             base.OnAppearing();
 
-            // Cargar mascotas registradas en el Picker
-            var mascotas = await App.Database.ObtenerMascotasAsync();
-            mascotaPicker.ItemsSource = mascotas;
+            try
+            {
+                var mascotas = await _mascotaService.ObtenerMascotasAsync();
+                mascotaPicker.ItemsSource = mascotas;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar las mascotas: {ex.Message}", "OK");
+            }
         }
 
         private async void OnGuardarCitaClicked(object sender, EventArgs e)
@@ -28,16 +35,17 @@ namespace VeterinariaApp.Views
             var mascotaSeleccionada = mascotaPicker.SelectedItem as Mascota;
             DateTime fecha = fechaPicker.Date;
             TimeSpan hora = horaPicker.Time;
-            string motivo = motivoEditor.Text;
+            string motivo = motivoEditor.Text?.Trim() ?? string.Empty;
 
             if (mascotaSeleccionada == null || string.IsNullOrWhiteSpace(motivo))
             {
-                await DisplayAlert("Campos incompletos", "Por favor selecciona una mascota y llena todos los campos.", "OK");
+                await DisplayAlert("Campos incompletos", "Selecciona una mascota y llena el motivo.", "OK");
                 return;
             }
 
             var nuevaCita = new Cita
             {
+                Id = 0,
                 NombreMascota = mascotaSeleccionada.Nombre,
                 Fecha = fecha,
                 Hora = hora,
@@ -45,11 +53,31 @@ namespace VeterinariaApp.Views
                 Usuario = Preferences.Get("NombreUsuario", "") // dueño que agenda
             };
 
-            await App.Database.GuardarCitaAsync(nuevaCita);
+            try
+            {
+                bool resultado = await _citaService.CrearCitaAsync(nuevaCita);
 
-            await DisplayAlert("Cita guardada", "La cita ha sido registrada correctamente.", "OK");
+                if (resultado)
+                {
+                    await DisplayAlert("Éxito", "La cita ha sido registrada correctamente.", "OK");
+                    // Limpieza rápida
+                    mascotaPicker.SelectedItem = null;
+                    fechaPicker.Date = DateTime.Today;
+                    horaPicker.Time = TimeSpan.Zero;
+                    motivoEditor.Text = string.Empty;
 
-            await Navigation.PushAsync(new ListaCitasPage());
+                    // Opcional: navegar a la lista
+                    await Navigation.PushAsync(new ListaCitasPage());
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se pudo registrar la cita en el servidor.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Ocurrió un problema al guardar la cita: {ex.Message}", "OK");
+            }
         }
     }
 }

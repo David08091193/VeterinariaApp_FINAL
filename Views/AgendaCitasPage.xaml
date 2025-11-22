@@ -4,7 +4,7 @@
              x:Class="VeterinariaApp.Views.AgendaCitasPage"
              Title="Agenda de Citas"
              BackgroundColor="#FAFAFA">
-            
+
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -15,15 +15,14 @@
                    TextColor="#333"/>
 
             <Picker x:Name="mascotaPicker"
-                   Title="Selecciona una mascota"
-                   ItemDisplayBinding="{Binding Nombre}"
-                   BackgroundColor="White"/>
+                    Title="Selecciona una mascota"
+                    ItemDisplayBinding="{Binding Nombre}"
+                    BackgroundColor="White"/>
 
             <DatePicker x:Name="fechaPicker"
                         Format="dd/MM/yyyy"
-                        MinimumDate="{x:Static sys:DateTime.Now}"
-                        FontSize="18"
-                        />
+                        MinimumDate="{x:Static sys:DateTime.Today}"
+                        FontSize="18"/>
 
             <TimePicker x:Name="horaPicker"
                         FontSize="18"/>

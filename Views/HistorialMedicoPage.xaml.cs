@@ -1,12 +1,15 @@
 using Microsoft.Maui.Controls;
 using System;
-using System.Collections.Generic;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class HistorialMedicoPage : ContentPage
     {
+        private readonly MascotaService _mascotaService = new();
+        private readonly HistorialMedicoService _historialService = new();
+
         public HistorialMedicoPage()
         {
             InitializeComponent();
@@ -16,9 +19,15 @@ namespace VeterinariaApp.Views
         {
             base.OnAppearing();
 
-            // Cargar mascotas registradas en el Picker
-            var mascotas = await App.Database.ObtenerMascotasAsync();
-            mascotaPicker.ItemsSource = mascotas;
+            try
+            {
+                var mascotas = await _mascotaService.ObtenerMascotasAsync();
+                mascotaPicker.ItemsSource = mascotas;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar las mascotas: {ex.Message}", "OK");
+            }
         }
 
         private async void OnGuardarHistorialClicked(object sender, EventArgs e)
@@ -33,7 +42,7 @@ namespace VeterinariaApp.Views
                 string.IsNullOrWhiteSpace(diagnostico) ||
                 string.IsNullOrWhiteSpace(tratamiento))
             {
-                await DisplayAlert("Campos incompletos", "Por favor selecciona una mascota y llena los campos obligatorios.", "OK");
+                await DisplayAlert("Campos incompletos", "Selecciona una mascota y llena los campos obligatorios.", "OK");
                 return;
             }
 
@@ -46,9 +55,17 @@ namespace VeterinariaApp.Views
                 Observaciones = observaciones
             };
 
-            await App.Database.GuardarHistorialAsync(historial);
-            await DisplayAlert("Historial guardado", "El historial médico ha sido registrado correctamente.", "OK");
-            await Navigation.PopAsync();
+            bool ok = await _historialService.CrearHistorialAsync(historial);
+
+            if (ok)
+            {
+                await DisplayAlert("Éxito", "El historial médico ha sido registrado correctamente.", "OK");
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo registrar el historial médico en el servidor.", "OK");
+            }
         }
     }
 }

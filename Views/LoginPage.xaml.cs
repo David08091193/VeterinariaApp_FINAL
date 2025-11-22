@@ -1,11 +1,14 @@
 using Microsoft.Maui.Controls;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 using Microsoft.Maui.Storage;
 
 namespace VeterinariaApp.Views
 {
     public partial class LoginPage : ContentPage
     {
+        private readonly UsuarioService _usuarioService = new();
+
         public LoginPage()
         {
             InitializeComponent();
@@ -16,15 +19,13 @@ namespace VeterinariaApp.Views
             var usuario = usuarioEntry.Text;
             var contraseña = contraseñaEntry.Text;
 
-            var usuarioValido = await App.Database.ValidarUsuarioAsync(usuario, contraseña);
+            var usuarioValido = await _usuarioService.LoginAsync(usuario, contraseña);
 
             if (usuarioValido != null)
             {
-                // Guardar rol y nombre del usuario
                 Preferences.Set("Rol", usuarioValido.Rol);
                 Preferences.Set("NombreUsuario", usuarioValido.NombreUsuario);
 
-                // Redirigir según el rol
                 switch (usuarioValido.Rol)
                 {
                     case "Administrador":

@@ -3,11 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VeterinariaApp.Models;
+using VeterinariaApp.Services;
 
 namespace VeterinariaApp.Views
 {
     public partial class VerHistorialPage : ContentPage
     {
+        private readonly MascotaService _mascotaService = new();
+        private readonly HistorialMedicoService _historialService = new();
+
         public VerHistorialPage()
         {
             InitializeComponent();
@@ -17,8 +21,15 @@ namespace VeterinariaApp.Views
         {
             base.OnAppearing();
 
-            var mascotas = await App.Database.ObtenerMascotasAsync();
-            mascotaPicker.ItemsSource = mascotas;
+            try
+            {
+                var mascotas = await _mascotaService.ObtenerMascotasAsync();
+                mascotaPicker.ItemsSource = mascotas;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar las mascotas: {ex.Message}", "OK");
+            }
         }
 
         private async void OnBuscarHistorialClicked(object sender, EventArgs e)
@@ -31,14 +42,21 @@ namespace VeterinariaApp.Views
                 return;
             }
 
-            var historial = await App.Database.ObtenerHistorialPorMascotaAsync(mascotaSeleccionada.Nombre);
-
-            if (historial.Count == 0)
+            try
             {
-                await DisplayAlert("Sin registros", "No se encontró historial médico para esta mascota.", "OK");
-            }
+                var historial = await _historialService.ObtenerHistorialPorMascotaAsync(mascotaSeleccionada.Nombre);
 
-            historialCollectionView.ItemsSource = historial;
+                if (historial.Count == 0)
+                {
+                    await DisplayAlert("Sin registros", "No se encontró historial médico para esta mascota.", "OK");
+                }
+
+                historialCollectionView.ItemsSource = historial;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudo cargar el historial: {ex.Message}", "OK");
+            }
         }
     }
 }
