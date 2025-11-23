@@ -1,5 +1,5 @@
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage; // para Preferences
+﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,11 +26,11 @@ namespace VeterinariaApp.Views
         private async Task CargarCitasPorRol()
         {
             string rol = Preferences.Get("Rol", "Usuario");
-            string nombreUsuario = Preferences.Get("NombreUsuario", "");
+            string nombreUsuario = Preferences.Get("Usuario", ""); // ← CORREGIDO
 
             List<Cita> citas;
 
-            if (rol == "Veterinario")
+            if (rol == "Veterinario" || rol == "Administrador")
             {
                 citas = await _citaService.ObtenerTodasLasCitasAsync();
             }
@@ -50,7 +50,7 @@ namespace VeterinariaApp.Views
             if (citaSeleccionada == null)
                 return;
 
-            bool confirmar = await DisplayAlert("Confirmar", "�Deseas eliminar esta cita?", "S�", "No");
+            bool confirmar = await DisplayAlert("Confirmar", "¿Deseas eliminar esta cita?", "Sí", "No");
             if (confirmar)
             {
                 bool ok = await _citaService.EliminarCitaAsync(citaSeleccionada.Id);

@@ -2,8 +2,8 @@
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using VeterinariaApp.Models;
 using System.Collections.Generic;
+using VeterinariaApp.Models;
 
 namespace VeterinariaApp.Services
 {
@@ -13,8 +13,10 @@ namespace VeterinariaApp.Services
 
         public CitaService()
         {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:5104"); // Ajusta el puerto al de tu API
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:5104") // Ajusta el puerto
+            };
         }
 
         // Crear cita
@@ -26,8 +28,8 @@ namespace VeterinariaApp.Services
             return response.IsSuccessStatusCode;
         }
 
-        // Obtener todas las citas
-        public async Task<List<Cita>> ObtenerCitasAsync()
+        // Obtener todas las citas (para Veterinario/Administrador)
+        public async Task<List<Cita>> ObtenerTodasLasCitasAsync()
         {
             var response = await _httpClient.GetAsync("/api/Cita");
             if (!response.IsSuccessStatusCode) return new List<Cita>();
@@ -39,7 +41,7 @@ namespace VeterinariaApp.Services
             }) ?? new List<Cita>();
         }
 
-        // Obtener citas por usuario
+        // Obtener citas por usuario (para MenuUsuarioPage / usuarios finales)
         public async Task<List<Cita>> ObtenerCitasPorUsuarioAsync(string usuario)
         {
             var response = await _httpClient.GetAsync($"/api/Cita/por-usuario/{usuario}");
@@ -52,13 +54,11 @@ namespace VeterinariaApp.Services
             }) ?? new List<Cita>();
         }
 
-        // Eliminar cita
+        // Eliminar cita (opcional)
         public async Task<bool> EliminarCitaAsync(int id)
         {
             var response = await _httpClient.DeleteAsync($"/api/Cita/{id}");
             return response.IsSuccessStatusCode;
         }
-
-
     }
 }

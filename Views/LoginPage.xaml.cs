@@ -1,4 +1,4 @@
-using Microsoft.Maui.Controls;
+Ôªøusing Microsoft.Maui.Controls;
 using VeterinariaApp.Models;
 using VeterinariaApp.Services;
 using Microsoft.Maui.Storage;
@@ -17,14 +17,14 @@ namespace VeterinariaApp.Views
         private async void OnIngresarClicked(object sender, EventArgs e)
         {
             var usuario = usuarioEntry.Text;
-            var contraseÒa = contraseÒaEntry.Text;
+            var contrase√±a = contrase√±aEntry.Text;
 
-            var usuarioValido = await _usuarioService.LoginAsync(usuario, contraseÒa);
+            var usuarioValido = await _usuarioService.LoginAsync(usuario, contrase√±a);
 
             if (usuarioValido != null)
             {
                 Preferences.Set("Rol", usuarioValido.Rol);
-                Preferences.Set("NombreUsuario", usuarioValido.NombreUsuario);
+                Preferences.Set("Usuario", usuarioValido.NombreUsuario); // ‚Üê CORREGIDO
 
                 switch (usuarioValido.Rol)
                 {
@@ -41,7 +41,7 @@ namespace VeterinariaApp.Views
             }
             else
             {
-                await DisplayAlert("Error", "Usuario o contraseÒa incorrectos.", "OK");
+                await DisplayAlert("Error", "Usuario o contrase√±a incorrectos.", "OK");
             }
         }
 
@@ -54,7 +54,7 @@ namespace VeterinariaApp.Views
         {
             base.OnAppearing();
             usuarioEntry.Text = string.Empty;
-            contraseÒaEntry.Text = string.Empty;
+            contrase√±aEntry.Text = string.Empty;
         }
     }
 }
