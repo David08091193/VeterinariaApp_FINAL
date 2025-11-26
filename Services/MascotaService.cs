@@ -14,7 +14,7 @@ namespace VeterinariaApp.Services
         public MascotaService()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:5104"); // Ajusta el puerto al de tu API
+            _httpClient.BaseAddress = new Uri("http://localhost:5104"); 
         }
 
         // Crear mascota
@@ -54,5 +54,18 @@ namespace VeterinariaApp.Services
             var response = await _httpClient.DeleteAsync($"/api/Mascota/{id}");
             return response.IsSuccessStatusCode;
         }
+        // mascotas del usuario actual
+        public async Task<List<Mascota>> ObtenerMascotasPorUsuarioAsync(string usuario)
+        {
+            var response = await _httpClient.GetAsync($"/api/Mascota/usuario/{usuario}");
+            if (!response.IsSuccessStatusCode) return new List<Mascota>();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<Mascota>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? new List<Mascota>();
+        }
+
     }
 }

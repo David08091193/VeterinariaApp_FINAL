@@ -10,6 +10,12 @@ namespace VeterinariaApp.Views
             InitializeComponent();
         }
 
+        private async void OnRegistrarMascotaClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RegistroMascotaPage());
+        }
+
+
         private async void OnMisMascotasClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ListaMascotasPage());

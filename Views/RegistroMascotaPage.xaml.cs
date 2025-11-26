@@ -1,15 +1,14 @@
-using Microsoft.Maui.Controls;
+ï»¿using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
+using Microsoft.Maui.Storage; // <-- Importante para usar Preferences
 using System;
 using VeterinariaApp.Models;
 using VeterinariaApp.Services;
-
 
 namespace VeterinariaApp.Views
 {
     public partial class RegistroMascotaPage : ContentPage
     {
-        // Cambia la declaración del campo fotoFile para que acepte valores null
         private FileResult? fotoFile;
 
         public RegistroMascotaPage()
@@ -48,7 +47,7 @@ namespace VeterinariaApp.Views
                 string.IsNullOrWhiteSpace(raza) ||
                 string.IsNullOrWhiteSpace(edad))
             {
-                await DisplayAlert("Validación", "Por favor completa todos los campos.", "OK");
+                await DisplayAlert("ValidaciÃ³n", "Por favor completa todos los campos.", "OK");
                 return;
             }
 
@@ -59,7 +58,8 @@ namespace VeterinariaApp.Views
                 Especie = especie,
                 Raza = raza,
                 Edad = edad,
-                FotoPath = fotoFile?.FullPath ?? "sin-foto.jpg"
+                FotoPath = fotoFile?.FullPath ?? "sin-foto.jpg",
+                Usuario = Preferences.Get("NombreUsuario", "") // AquÃ­ asociamos la mascota al usuario actual
             };
 
             var servicio = new MascotaService();
@@ -67,7 +67,7 @@ namespace VeterinariaApp.Views
 
             if (resultado)
             {
-                await DisplayAlert("Éxito", "Mascota registrada correctamente en el servidor.", "OK");
+                await DisplayAlert("Ã‰xito", "Mascota registrada correctamente en el servidor.", "OK");
 
                 nombreEntry.Text = "";
                 especieEntry.Text = "";
@@ -80,9 +80,6 @@ namespace VeterinariaApp.Views
             {
                 await DisplayAlert("Error", "No se pudo registrar la mascota en el servidor.", "OK");
             }
-
-
-
         }
 
         private async void OnVerMascotasClicked(object sender, EventArgs e)

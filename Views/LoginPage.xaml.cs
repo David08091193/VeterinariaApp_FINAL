@@ -24,7 +24,9 @@ namespace VeterinariaApp.Views
             if (usuarioValido != null)
             {
                 Preferences.Set("Rol", usuarioValido.Rol);
-                Preferences.Set("Usuario", usuarioValido.NombreUsuario); // ← CORREGIDO
+
+                // ✅ CAMBIO CLAVE: guardar como "NombreUsuario" para que el registro funcione
+                Preferences.Set("NombreUsuario", usuarioValido.NombreUsuario);
 
                 switch (usuarioValido.Rol)
                 {

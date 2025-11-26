@@ -17,6 +17,15 @@
                 HeightRequest="50"
                 Clicked="OnMisMascotasClicked" />
 
+        <Button x:Name="btnRegistrarMascota"
+                Text="📝 Registrar Mascota"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                HeightRequest="50"
+                Clicked="OnRegistrarMascotaClicked" />
+
         <Button x:Name="btnAgendar"
                 Text="📅 Agendar Cita"
                 BackgroundColor="#03A9F4"

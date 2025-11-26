@@ -7,13 +7,25 @@
         <CollectionView x:Name="mascotasCollectionView">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BorderColor="LightGray" Padding="10" Margin="5">
-                        <StackLayout>
-                            <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="18"/>
-                            <Label Text="{Binding Especie}" />
-                            <Label Text="{Binding Raza}" />
-                            <Label Text="{Binding Edad}" />
-                            <Label Text="{Binding FotoPath}" FontSize="12" TextColor="Gray"/>
+                    <Frame BorderColor="LightGray" Padding="10" Margin="5" CornerRadius="8">
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+
+                            <!-- Imagen de la mascota -->
+                            <Image Source="{Binding FotoPath}"
+                                   WidthRequest="80"
+                                   HeightRequest="80"
+                                   Aspect="AspectFill"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Start" />
+
+                            <!-- Datos de la mascota -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="18"/>
+                                <Label Text="{Binding Especie}" FontSize="14"/>
+                                <Label Text="{Binding Raza}" FontSize="14"/>
+                                <Label Text="{Binding Edad, StringFormat='Edad: {0}'}" FontSize="14"/>
+
+                            </StackLayout>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>
