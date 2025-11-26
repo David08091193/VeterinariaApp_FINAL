@@ -26,6 +26,14 @@
                                     TextColor="White"
                                     Clicked="OnEliminarCitaClicked"
                                     CommandParameter="{Binding .}"/>
+
+                            <Button Text="Editar cita ✏️"
+                                    BackgroundColor="#2196F3"
+                                    TextColor="White"
+                                    Clicked="OnEditarCitaClicked"
+                                    CommandParameter="{Binding .}"/>
+
+
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>

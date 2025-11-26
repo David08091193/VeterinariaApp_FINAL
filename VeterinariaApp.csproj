@@ -51,6 +51,9 @@
     <MauiXaml Update="Resources\RolStyles.xaml"><Generator>MSBuild:Compile</Generator></MauiXaml>
     <MauiXaml Update="Views\AgendaCitasPage.xaml"><Generator>MSBuild:Compile</Generator></MauiXaml>
     <MauiXaml Update="Views\BienvenidaPage.xaml"><Generator>MSBuild:Compile</Generator></MauiXaml>
+    <MauiXaml Update="Views\EditarCitaPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\EditarMascotaPage.xaml"><Generator>MSBuild:Compile</Generator></MauiXaml>
     <MauiXaml Update="Views\EntradaSalidaPage.xaml"><Generator>MSBuild:Compile</Generator></MauiXaml>
     <MauiXaml Update="Views\HistorialMedicoPage.xaml"><Generator>MSBuild:Compile</Generator></MauiXaml>

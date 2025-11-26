@@ -1,0 +1,31 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VeterinariaApp.Views.EditarCitaPage"
+             Title="Editar Cita"
+             BackgroundColor="#FAFAFA">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Editar Cita"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"/>
+
+        <DatePicker x:Name="fechaPicker"
+                    Format="dd/MM/yyyy"
+                    FontSize="18"/>
+
+        <TimePicker x:Name="horaPicker"
+                    FontSize="18"/>
+
+        <Editor x:Name="motivoEditor"
+                Placeholder="Motivo de la cita"
+                AutoSize="TextChanges"
+                FontSize="18"/>
+
+        <Button Text="Guardar Cambios"
+                Clicked="OnGuardarCambiosClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"/>
+    </VerticalStackLayout>
+</ContentPage>

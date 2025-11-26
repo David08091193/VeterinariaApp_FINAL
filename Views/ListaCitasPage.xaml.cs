@@ -64,6 +64,19 @@ namespace VeterinariaApp.Views
                     await DisplayAlert("Error", "No se pudo eliminar la cita en el servidor.", "OK");
                 }
             }
+
         }
+
+        private async void OnEditarCitaClicked(object sender, EventArgs e)
+        {
+            var boton = sender as Button;
+            var citaSeleccionada = boton?.CommandParameter as Cita;
+
+            if (citaSeleccionada == null)
+                return;
+
+            await Navigation.PushAsync(new EditarCitaPage(citaSeleccionada));
+        }
+
     }
 }

@@ -60,5 +60,28 @@ namespace VeterinariaApp.Services
             var response = await _httpClient.DeleteAsync($"/api/Cita/{id}");
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<List<Cita>> ObtenerCitasPorFechaAsync(DateTime fecha)
+        {
+            var response = await _httpClient.GetAsync($"/api/Cita/fecha/{fecha:yyyy-MM-dd}");
+            if (!response.IsSuccessStatusCode) return new List<Cita>();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<Cita>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? new List<Cita>();
+        }
+
+        public async Task<bool> ActualizarCitaAsync(Cita cita)
+        {
+            var json = JsonSerializer.Serialize(cita);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync($"/api/Cita/{cita.Id}", content);
+            return response.IsSuccessStatusCode;
+        }
+
+
     }
 }
