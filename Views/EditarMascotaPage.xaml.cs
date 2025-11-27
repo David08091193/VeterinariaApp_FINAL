@@ -28,17 +28,25 @@ namespace VeterinariaApp.Views
 
         private async void OnActualizarClicked(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(nombreEntry.Text) ||
+                string.IsNullOrWhiteSpace(especieEntry.Text) ||
+                string.IsNullOrWhiteSpace(razaEntry.Text) ||
+                string.IsNullOrWhiteSpace(edadEntry.Text))
+            {
+                await DisplayAlert("Validación", "Por favor completa todos los campos.", "OK");
+                return;
+            }
+
             mascotaActual.Nombre = nombreEntry.Text;
             mascotaActual.Especie = especieEntry.Text;
             mascotaActual.Raza = razaEntry.Text;
             mascotaActual.Edad = edadEntry.Text;
 
             bool ok = await _mascotaService.ActualizarMascotaAsync(mascotaActual);
-
             if (ok)
             {
                 await DisplayAlert("Éxito", "Mascota actualizada correctamente.", "OK");
-                await Navigation.PopAsync(); // Regresa a la lista
+                await Navigation.PopAsync();
             }
             else
             {

@@ -1,6 +1,7 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VeterinariaApp.Services;
 using VeterinariaApp.Models;
@@ -33,12 +34,10 @@ namespace VeterinariaApp.Views
 
                 if (rol == "Administrador")
                 {
-                    // Ver todas las mascotas
                     mascotas = await _mascotaService.ObtenerMascotasAsync();
                 }
                 else
                 {
-                    // Ver solo las del usuario actual
                     mascotas = await _mascotaService.ObtenerMascotasPorUsuarioAsync(usuario);
                 }
 
@@ -47,6 +46,36 @@ namespace VeterinariaApp.Views
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"No se pudieron cargar las mascotas: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnEditarMascotaClicked(object sender, EventArgs e)
+        {
+            var boton = sender as Button;
+            var mascota = boton?.BindingContext as Mascota;
+            if (mascota == null) return;
+
+            await Navigation.PushAsync(new EditarMascotaPage(mascota));
+        }
+
+        private async void OnEliminarMascotaClicked(object sender, EventArgs e)
+        {
+            var boton = sender as Button;
+            var mascota = boton?.BindingContext as Mascota;
+            if (mascota == null) return;
+
+            bool confirmar = await DisplayAlert("Confirmar", $"¿Eliminar a {mascota.Nombre}?", "Sí", "No");
+            if (!confirmar) return;
+
+            bool ok = await _mascotaService.EliminarMascotaAsync(mascota.Id);
+            if (ok)
+            {
+                await DisplayAlert("Éxito", "Mascota eliminada correctamente.", "OK");
+                await CargarMascotasSegunRol();
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se pudo eliminar la mascota.", "OK");
             }
         }
     }

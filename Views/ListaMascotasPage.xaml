@@ -18,14 +18,49 @@
                                    VerticalOptions="Center"
                                    HorizontalOptions="Start" />
 
-                            <!-- Datos de la mascota -->
-                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="18"/>
-                                <Label Text="{Binding Especie}" FontSize="14"/>
-                                <Label Text="{Binding Raza}" FontSize="14"/>
-                                <Label Text="{Binding Edad, StringFormat='Edad: {0}'}" FontSize="14"/>
+                            <!-- Datos + Botones -->
+                            <Grid VerticalOptions="Center"
+                                  ColumnDefinitions="*,Auto">
 
-                            </StackLayout>
+                                <!-- Datos -->
+                                <StackLayout Orientation="Vertical"
+                                             Grid.Column="0"
+                                             Spacing="4">
+
+                                    <Label Text="{Binding Nombre}"
+                                           FontAttributes="Bold"
+                                           FontSize="18" />
+
+                                    <Label Text="{Binding Especie}"
+                                           FontSize="14" />
+
+                                    <Label Text="{Binding Raza}"
+                                           FontSize="14" />
+
+                                    <Label Text="{Binding Edad, StringFormat='Edad: {0}'}"
+                                           FontSize="14" />
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal"
+                                             Grid.Column="1"
+                                             Spacing="10"
+                                             Margin="0,6,0,0">
+
+                                    <Button Text="Editar"
+                                            FontSize="12"
+                                            Clicked="OnEditarMascotaClicked"
+                                            BackgroundColor="#2196F3"
+                                            TextColor="White"
+                                            CornerRadius="5" />
+
+                                    <Button Text="Eliminar"
+                                            FontSize="12"
+                                            Clicked="OnEliminarMascotaClicked"
+                                            BackgroundColor="Red"
+                                            TextColor="White"
+                                            CornerRadius="5" />
+                                </StackLayout>
+                            </Grid>
                         </StackLayout>
                     </Frame>
                 </DataTemplate>
