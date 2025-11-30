@@ -1,9 +1,13 @@
 ﻿using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
+using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.ApplicationModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Text.Json;
 using VeterinariaApp.Models;
 using VeterinariaApp.Services;
 
@@ -66,7 +70,7 @@ namespace VeterinariaApp.Views
                 var label = new Label
                 {
                     Text = esHoy ? $"Hoy {fecha.Day}" : fecha.Day.ToString(),
-                    FontSize = 14,
+                    FontSize = 13,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
                     TextColor = esHoy ? Colors.Red : Colors.Black
@@ -75,9 +79,11 @@ namespace VeterinariaApp.Views
                 var estado = new Label
                 {
                     Text = ocupado ? "No disponible" : "Disponible",
-                    FontSize = 12,
+                    FontSize = 11,
                     HorizontalOptions = LayoutOptions.Center,
-                    TextColor = ocupado ? Colors.Gray : Colors.Green
+                    TextColor = ocupado ? Colors.Gray : Colors.Green,
+                    LineBreakMode = LineBreakMode.WordWrap,
+                    MaxLines = 2
                 };
 
                 var stack = new Frame
@@ -85,12 +91,13 @@ namespace VeterinariaApp.Views
                     Content = new VerticalStackLayout
                     {
                         Children = { label, estado },
-                        Padding = 4
+                        Padding = 3
                     },
                     BorderColor = ocupado ? Colors.Gray : Colors.LightGreen,
                     BackgroundColor = ocupado ? Color.FromArgb("#F5F5F5") : Color.FromArgb("#FFFFFF"),
-                    CornerRadius = 6,
-                    Margin = 2
+                    CornerRadius = 4,
+                    Margin = 1,
+                    MinimumHeightRequest = 50
                 };
 
                 calendarioGrid.Add(stack, columna, fila);
@@ -160,6 +167,98 @@ namespace VeterinariaApp.Views
             {
                 await DisplayAlert("Error", $"Ocurrió un problema al guardar la cita: {ex.Message}", "OK");
             }
+        }
+
+        private async void OnDetectarUbicacionClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var location = await Geolocation.GetLocationAsync();
+                if (location == null)
+                {
+                    await DisplayAlert("Ubicación", "No se pudo obtener la ubicación actual.", "OK");
+                    return;
+                }
+
+                string direccion = await ReverseGeocodeAsync(location);
+                if (!string.IsNullOrWhiteSpace(direccion))
+                {
+                    await DisplayAlert("Ubicación", direccion, "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Ubicación",
+                        $"Latitud: {location.Latitude}\nLongitud: {location.Longitude}",
+                        "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudo obtener la ubicación: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task<string> ReverseGeocodeAsync(Location location)
+        {
+#if WINDOWS
+            try
+            {
+                using var http = new HttpClient();
+                http.DefaultRequestHeaders.UserAgent.ParseAdd("VeterinariaApp/1.0 (contacto: ejemplo@correo.com)");
+
+                string url = $"https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={location.Latitude}&lon={location.Longitude}";
+                var resp = await http.GetAsync(url);
+                if (!resp.IsSuccessStatusCode) return string.Empty;
+
+                var json = await resp.Content.ReadAsStringAsync();
+                var doc = JsonDocument.Parse(json);
+                if (!doc.RootElement.TryGetProperty("address", out var addr)) return string.Empty;
+
+                string ciudad = Get(addr, "city", "town", "village");
+                string barrio = Get(addr, "suburb", "neighbourhood");
+                string calle  = Get(addr, "road");
+                string estado = Get(addr, "state");
+                string pais   = Get(addr, "country");
+
+                return $"Ubicación detectada:\nCiudad: {ciudad}\nBarrio: {barrio}\nCalle: {calle}\nProvincia/Estado: {estado}\nPaís: {pais}";
+            }
+            catch
+            {
+                return string.Empty;
+            }
+#else
+            try
+            {
+                var placemarks = await Geocoding.GetPlacemarksAsync(location);
+                var p = placemarks?.FirstOrDefault();
+                if (p == null) return string.Empty;
+
+                string ciudad = p.Locality;
+                string barrio = p.SubLocality;
+                string calle = p.Thoroughfare;
+                string estado = p.AdminArea;
+                string pais = p.CountryName;
+
+                return $"Ubicación detectada:\nCiudad: {ciudad}\nBarrio: {barrio}\nCalle: {calle}\nProvincia/Estado: {estado}\nPaís: {pais}";
+            }
+            catch
+            {
+                return string.Empty;
+            }
+#endif
+        }
+
+        private static string Get(JsonElement addr, params string[] keys)
+        {
+            foreach (var k in keys)
+            {
+                if (addr.TryGetProperty(k, out var v))
+                {
+                    var s = v.GetString();
+                    if (!string.IsNullOrWhiteSpace(s)) return s;
+                }
+            }
+            return "(no disponible)";
         }
     }
 }

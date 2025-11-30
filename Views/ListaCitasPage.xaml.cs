@@ -26,7 +26,8 @@ namespace VeterinariaApp.Views
         private async Task CargarCitasPorRol()
         {
             string rol = Preferences.Get("Rol", "Usuario");
-            string nombreUsuario = Preferences.Get("Usuario", ""); // ← CORREGIDO
+            string nombreUsuario = Preferences.Get("NombreUsuario", "");
+
 
             List<Cita> citas;
 
